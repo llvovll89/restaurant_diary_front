@@ -1,0 +1,1 @@
+export const KAKAO_ADDRESS_API = `https://dapi.kakao.com/v2/local/search/keyword.json`;

@@ -11,6 +11,8 @@ interface MapContextType {
     marker: any;
     setMap: (map: any) => void;
     setMarker: (marker: any) => void;
+    isVisibleSidebar: boolean;
+    toggleIsVisibleSidebar: () => void;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
@@ -18,9 +20,14 @@ const MapContext = createContext<MapContextType | undefined>(undefined);
 export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     const [map, setMap] = useState<any>(null);
     const [marker, setMarker] = useState<any>(null);
+    const [isVisibleSidebar, setIsVisibleSidebar] = useState(false);
+
+    const toggleIsVisibleSidebar = () => {
+        setIsVisibleSidebar(!isVisibleSidebar);
+    }
 
     return (
-        <MapContext.Provider value={{ map, marker, setMap, setMarker }}>
+        <MapContext.Provider value={{ map, marker, setMap, setMarker, toggleIsVisibleSidebar, isVisibleSidebar }}>
             {children}
         </MapContext.Provider>
     );

@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { List } from "./aside/List";
 import { getGeoLocationApi } from "../../utils/getGeoLocationApi";
 import { useMap } from "./context/MapContext";
+import { UserLocation } from "../../components/location/UserLocation";
 
 export const Map = () => {
-    const { map, marker, setMap, setMarker } = useMap();
+    const { map, marker, setMap, setMarker, isVisibleSidebar } = useMap();
 
     useEffect(() => {
         const initMap = async () => {
@@ -49,7 +50,12 @@ export const Map = () => {
             id="map"
             className="w-screen h-[calc(100vh-50px)] fixed top-[50px] bg-gray-300 left-0"
         >
-            <List />
+            <UserLocation />
+            {
+                isVisibleSidebar && (
+                    <List />
+                )
+            }
         </div>
     );
 };

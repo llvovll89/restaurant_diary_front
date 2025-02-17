@@ -96,12 +96,14 @@ export const Search = ({ setAddressList }: Props) => {
     }, []);
 
     return (
-        <article className="flex items-center w-full h-[50px] p-1 text-white border-b border-solid border-gray-300 font-bold">
+        <article className="flex w-full h-[82px] px-3 py-2 gap-2 bg-[#09f] text-white border-b border-solid border-gray-300 font-bold flex-col">
+            <span>맛집 다이어리</span>
+
             {isVisibleSearchForm ? (
-                <div className="flex items-center justify-between w-full h-full gap-1">
+                <div className="flex items-center justify-between w-full h-[50px] gap-1">
                     <input
                         type="text"
-                        className="w-[calc(100%-46px)] rounded-[5px] border border-solid border-black text-black text-xs h-full focus:outline-none p-2"
+                        className="w-[calc(100%-46px)] rounded-[5px] border border-solid border-white text-black text-xs h-full focus:outline-none p-2"
                         placeholder="Search..."
                         value={address}
                         onChange={(e) => setAdress(e.target.value)}
@@ -110,7 +112,7 @@ export const Search = ({ setAddressList }: Props) => {
                     />
                     <button
                         onClick={toggleSearchForm}
-                        className="w-[42px] h-full flex items-center justify-center rounded-[5px] bg-[#09f]"
+                        className="w-[42px] h-full flex items-center justify-center rounded-[5px] bg-[#09f] border border-solid border-white"
                     >
                         <img
                             src="/images/icons/ico_x.svg"
@@ -122,7 +124,7 @@ export const Search = ({ setAddressList }: Props) => {
             ) : (
                 <button
                     onClick={toggleSearchForm}
-                    className="gap-2 w-full h-full bg-[#09f] flex items-center justify-center rounded-[5px]"
+                    className="gap-2 w-full h-[36px] border border-solid flex items-center justify-center rounded-[5px]"
                 >
                     <img
                         src="/images/icons/ico_search.svg"

@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { List } from "./aside/List";
 import { getGeoLocationApi } from "../../utils/getGeoLocationApi";
 import { useMap } from "./context/MapContext";
 import { UserLocation } from "../../components/location/UserLocation";
+import GlobalContext from "../../context/globalContext";
 
 export const Map = () => {
     const { map, marker, setMap, setMarker, isVisibleSidebar } = useMap();
+    const { isMobile } = useContext(GlobalContext);
 
     useEffect(() => {
         const initMap = async () => {

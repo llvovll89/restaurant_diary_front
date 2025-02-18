@@ -26,6 +26,17 @@ export const Map = () => {
                     );
                     const newMarker = new window.kakao.maps.Marker({
                         position: new window.kakao.maps.LatLng(lat, lng),
+                        clickable: true
+                    });
+
+                    const infowindow = new window.kakao.maps.InfoWindow({
+                        content: `<div style="padding:5px;">Hello World!</div>`,
+                        removable: true,
+                    });
+
+                    newMarker.addListener("click", () => {
+                        alert(`${lat} : ${lng}`);
+                        infowindow.open(map, marker);
                     });
 
                     newMarker.setMap(newMap);

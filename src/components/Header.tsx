@@ -27,12 +27,12 @@ export const Header = () => {
 
     // ✅ 공통 네비게이션 링크 컴포넌트
     const NavLinks = () => (
-        <ul className="flex items-center gap-4 h-full font-bold">
+        <ul className="flex items-center h-full font-bold">
             {routes.map((r) => (
                 <Link
                     to={r.path}
                     key={r.path}
-                    className={`${locationPath === r.path && "bg-[#09f]"} w-[56px] text-black h-full flex items-center justify-center pointerHover:hover:scale-[0.97] pointerHover:hover:bg-sub_navy duration-150 ease-in-out`}
+                    className={`${locationPath === r.path ? "bg-[#09f]" : "bg-black"} w-[56px] text-white h-full flex items-center justify-center pointerHover:hover:scale-[0.97] pointerHover:hover:bg-sub_navy duration-150 ease-in-out`}
                     title={r.name}
                 >
                     {r.icons ? <img src={r.icons} alt={r.name} className="w-6 h-6" /> : <span>{r.name}</span>}
@@ -43,9 +43,9 @@ export const Header = () => {
 
     return (
         <header
-            className={`fixed left-0 top-0 z-[100] flex items-center justify-between ${isMobile ? "w-full h-[32px] text-xs px-1" : "bg-white w-screen h-[50px] pl-2 pr-6"}`}
+            className={`fixed left-0 top-0 z-[100] flex items-center justify-between ${isMobile ? "w-full h-[32px] text-xs px-1" : "bg-white w-screen h-[50px] pl-2"}`}
         >
-            <div className="text-white flex items-center gap-2 h-full">
+            <div className="text-white flex items-center gap-2 h-full w-[150px]">
                 <SidebarToggleButton />
                 <h1 className="font-bold text-black select-none">Restaurant_diary</h1>
             </div>
@@ -53,10 +53,10 @@ export const Header = () => {
             <NavLinks />
 
             {!isMobile && (
-                <div className="w-[120px] h-full">
+                <div className="w-[150px] h-full">
                     <button
                         onClick={toggleActiveSignIn}
-                        className={`${isActiveSignIn && "bg-[#09f]"} w-[56px] text-white h-full flex items-center justify-center pointerHover:hover:scale-[0.97] pointerHover:hover:bg-sub_navy duration-150 ease-in-out`}
+                        className={`${isActiveSignIn ? "bg-[#09f]" : "bg-black"} w-[56px] ml-auto text-white h-full flex items-center justify-center pointerHover:hover:scale-[0.97] pointerHover:hover:bg-sub_navy duration-150 ease-in-out`}
                     >
                         <img src="images/icons/ico_user.svg" alt="sign-in" className="w-6 h-6" />
                     </button>

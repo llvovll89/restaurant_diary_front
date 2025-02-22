@@ -1,12 +1,14 @@
 import { useState } from "react";
+import useLocalStorage from "../../../../hooks/useLocalStorage";
 
 interface Props {
     toggleActiveSignIn: () => void;
 }
 
 export const SignInForm = ({ toggleActiveSignIn }: Props) => {
+    const [userId, setUserId] = useLocalStorage<string>("userId", "");
     const [signInData, setSignInData] = useState({
-        id: "",
+        id: userId,
         password: "",
     });
 
@@ -21,7 +23,8 @@ export const SignInForm = ({ toggleActiveSignIn }: Props) => {
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
+        setUserId(signInData.id);
+        
         alert(`${signInData.id}(님) 반갑습니다!`);
         toggleActiveSignIn();
     };

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
 import { DiaryList } from "./list/DiaryList"
 import { DiaryDto } from "./constants/DiaryDto.type"
+import { Form } from "./form/Form";
 
 export const Diary = () => {
     const [diaryList, setDiaryList] = useState<DiaryDto[]>([]);
+    const [selectedDiary, setSelectedDiary] = useState<DiaryDto | null>(null);
 
     useEffect(() => {
         setDiaryList([
@@ -31,13 +33,31 @@ export const Diary = () => {
         ])
     }, []);
 
+    const selectedItem = (diary: DiaryDto) => {
+        if (selectedDiary !== diary) {
+            setSelectedDiary(diary);
+        } else {
+            setSelectedDiary(null);
+        }
+    };
+
+    const resetSelectedDiary = () => {
+        setSelectedDiary(null);
+    }
+
     return (
-        <section className="w-screen h-[calc(100vh-50px)] fixed top-[50px] left-0 bg-primary">
-            <aside className="w-[300px] h-full bg-black text-white">
+        <section className="w-screen h-[calc(100vh-50px)] fixed top-[50px] left-0 flex">
+            <aside className="w-[300px] h-full relative z-[10] border-r border-solid border-gray-200">
                 <ul className="w-full p-2 flex flex-col gap-3">
-                    <DiaryList diaryList={diaryList} />
+                    <DiaryList diaryList={diaryList} selectedItem={selectedItem} selectedDiary={selectedDiary} />
                 </ul>
             </aside>
+
+            {
+                selectedDiary && (
+                    <Form selectedDiary={selectedDiary} resetSelectedDiary={resetSelectedDiary} />
+                )
+            }
         </section>
     )
 }

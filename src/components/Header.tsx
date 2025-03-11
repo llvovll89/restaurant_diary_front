@@ -13,6 +13,7 @@ export const Header = () => {
     const { isMobile } = useContext(GlobalContext);
     const [userId, , deleteValue] = useLocalStorage<string>("userId", "");
     const navigate = useNavigate();
+    const isVisibleSideToggleBtn = useLocation().pathname.includes("/diary");
 
     const toggleActiveSignIn = () => setIsActiveSignIn((prev) => !prev);
 
@@ -99,7 +100,7 @@ export const Header = () => {
             }`}
         >
             <div className="text-white flex items-center gap-2 h-full w-[150px]">
-                <SidebarToggleButton />
+                {!isVisibleSideToggleBtn && <SidebarToggleButton />}
                 <h1 className="font-bold text-black select-none">
                     Restaurant_diary
                 </h1>

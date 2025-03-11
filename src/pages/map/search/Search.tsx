@@ -1,11 +1,12 @@
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { KAKAO_ADDRESS_API } from "../../../api/api";
 import { useMap } from "../context/MapContext";
+import { SearchDto } from "../aside/dto/SearchListDto";
 
 interface Props {
-    setAddressList: React.Dispatch<React.SetStateAction<any[]>>;
+    setAddressList: React.Dispatch<React.SetStateAction<SearchDto[]>>;
 }
+
+const { kakao } = window as any;
 
 export const Search = ({ setAddressList }: Props) => {
     const [isVisibleSearchForm, setIsVisibleSearchForm] = useState(false);
@@ -41,52 +42,21 @@ export const Search = ({ setAddressList }: Props) => {
         }
     };
 
+    const placesSearchCB = (data: SearchDto[], status: any, pagination: any) => {
+        if (status === kakao.maps.services.Status.OK) {
+            setAddressList(data);
+        } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+          alert('검색 결과가 존재하지 않습니다.');
+          return;
+        } else if (status === kakao.maps.services.Status.ERROR) {
+          alert('검색 결과 중 오류가 발생했습니다.');
+          return;
+        }
+      }
+
     const getPoiSearch = () => {
-        const API_KEY = import.meta.env.VITE_KAKAO_MAP_API;
-        const mapLat = map.getCenter().Ma;
-        const mapLon = map.getCenter().La;
-
-        const params = {
-            query: address.trim(),
-            x: mapLon,
-            y: mapLat,
-            radius: 5000,
-            sort: "distance",
-        };
-
-        console.log(params);
-
-        axios
-            .get(KAKAO_ADDRESS_API, {
-                params,
-                headers: {
-                    Authorization: `KakaoAK ${API_KEY}`,
-                },
-            })
-            .then((response) => {
-                const data = response.data;
-
-                if (data.documents.length === 0) {
-                    alert("검색 결과가 없습니다.");
-                } else {
-                    const items = data.documents.map((item: any) => ({
-                        y: parseFloat(item.y),
-                        x: parseFloat(item.x),
-                        jibunAddress: item.address_name,
-                        roadAddress: item.road_address_name,
-                        title: item.place_name,
-                        link: item.place_url,
-                        distance: parseFloat(item.distance),
-                    }));
-
-                    console.log("list items: " + items);
-                    // setAddressList(items);
-                }
-            })
-            .catch((error) => {
-                console.log("카카오 API 요청 실패:", error);
-                alert(error.message);
-            });
+        const ps = new kakao.maps.services.Places();
+        ps.keywordSearch(address.trim(), placesSearchCB);
     };
 
     useEffect(() => {

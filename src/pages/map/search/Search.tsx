@@ -18,6 +18,7 @@ export const Search = ({ setAddressList }: Props) => {
     const toggleSearchForm = () => {
         if (address) {
             setAdress("");
+            setAddressList([]);
         }
 
         setIsVisibleSearchForm((prevState) => !prevState);
@@ -74,7 +75,7 @@ export const Search = ({ setAddressList }: Props) => {
                     <input
                         type="text"
                         className="w-[calc(100%-46px)] rounded-[5px] border border-solid border-white text-black text-xs h-full focus:outline-none p-2"
-                        placeholder="Search..."
+                        placeholder="장소, 주소, 키워드 검색"
                         value={address}
                         onChange={(e) => setAdress(e.target.value)}
                         onKeyDown={onKeydown}

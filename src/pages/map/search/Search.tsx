@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useMap } from "../context/MapContext";
-import { SearchDto } from "../aside/dto/SearchListDto";
-
-interface Props {
-    setAddressList: React.Dispatch<React.SetStateAction<SearchDto[]>>;
-}
+import {useMap} from "../context/MapContext";
+import {SearchDto} from "../aside/dto/SearchListDto";
+import {List} from "../aside/List";
 
 const { kakao } = window as any;
 
-export const Search = ({ setAddressList }: Props) => {
+export const Search = () => {
     const [isVisibleSearchForm, setIsVisibleSearchForm] = useState(false);
+    const [addressList, setAddressList] = useState<SearchDto[]>([]);
     const [address, setAdress] = useState("");
+    const markers = useRef<any[]>([]);
     const { map } = useMap();
 
     const searchRef = useRef(null);
@@ -19,6 +18,7 @@ export const Search = ({ setAddressList }: Props) => {
         if (address) {
             setAdress("");
             setAddressList([]);
+            removeMarkers();
         }
 
         setIsVisibleSearchForm((prevState) => !prevState);
@@ -45,19 +45,72 @@ export const Search = ({ setAddressList }: Props) => {
 
     const placesSearchCB = (data: SearchDto[], status: any, pagination: any) => {
         if (status === kakao.maps.services.Status.OK) {
+            const bounds = new kakao.maps.LatLngBounds();
+
             setAddressList(data);
+            
+            if (data.length > 0) {
+                removeMarkers();
+
+                data.forEach((item, idx) => {
+                    const placePosition = new kakao.maps.LatLng(item.y, item.x)
+                    
+                    kakao.maps.event.addListener(addMarker(placePosition, idx), 'click', function() {
+                        const infoWindow = new kakao.maps.InfoWindow({
+                            content : `<div style="padding:5px;">${item.address_name}</div>`,
+                            removable : true,
+                        });
+
+                        infoWindow.open(map, addMarker(placePosition, idx));  
+                  });
+                    
+                  bounds.extend(placePosition);
+                })
+
+                map.setBounds(bounds);
+            }
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          alert('검색 결과가 존재하지 않습니다.');
-          return;
+            alert('검색 결과가 존재하지 않습니다.');
+            toggleSearchForm();
+            
+            return;
         } else if (status === kakao.maps.services.Status.ERROR) {
-          alert('검색 결과 중 오류가 발생했습니다.');
-          return;
+            alert('검색 결과 중 오류가 발생했습니다.');
+            return;
         }
-      }
+    }
 
     const getPoiSearch = () => {
         const ps = new kakao.maps.services.Places();
         ps.keywordSearch(address.trim(), placesSearchCB);
+    };
+
+    const addMarker = (position, idx: number) => {
+        const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png';
+        const imageSize = new kakao.maps.Size(36, 37); 
+        const imgOptions =  {
+                spriteSize : new kakao.maps.Size(36, 691),
+                spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), 
+                offset: new kakao.maps.Point(13, 37) 
+            };
+        const  markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions);
+        const  marker = new kakao.maps.Marker({
+                position: position,
+                image: markerImage,
+                clickable: true
+            });
+
+        marker.setMap(map); 
+        markers.current.push(marker);
+
+        return marker;
+    };
+
+    const removeMarkers = () => {
+        if (markers.current.length > 0) {
+            markers.current.forEach(marker => marker.setMap(null));
+            markers.current = [];
+        }
     };
 
     useEffect(() => {
@@ -67,14 +120,11 @@ export const Search = ({ setAddressList }: Props) => {
     }, []);
 
     return (
-        <article className="flex w-full h-[82px] px-3 py-2 gap-2 bg-[#09f] text-white border-b border-solid border-gray-300 font-bold flex-col">
-            <span>맛집 다이어리</span>
-
-            {isVisibleSearchForm ? (
-                <div className="flex items-center justify-between w-full h-[50px] gap-1">
+        <article className="flex w-full h-[50px] px-1 py-2 gap-2 text-white border-b border-solid border-gray-300 font-bold flex-col relative">
+            <div className="flex items-center justify-between w-full h-[50px]">
                     <input
                         type="text"
-                        className="w-[calc(100%-46px)] rounded-[5px] border border-solid border-white text-black text-xs h-full focus:outline-none p-2"
+                        className="focus:border-[#09f] w-[calc(100%-46px)] rounded-[5px] border border-solid border-[#DEDEDE] text-black text-xs h-full focus:outline-none p-2"
                         placeholder="장소, 주소, 키워드 검색"
                         value={address}
                         onChange={(e) => setAdress(e.target.value)}
@@ -92,19 +142,8 @@ export const Search = ({ setAddressList }: Props) => {
                         />
                     </button>
                 </div>
-            ) : (
-                <button
-                    onClick={toggleSearchForm}
-                    className="gap-2 w-full h-[36px] border border-solid flex items-center justify-center rounded-[5px]"
-                >
-                    <img
-                        src="/images/icons/ico_search.svg"
-                        className="w-6 h-6"
-                        alt="검색"
-                    />
-                    <span>검색</span>
-                </button>
-            )}
+
+                {addressList.length > 0 && <List addressList={addressList} />}
         </article>
     );
 };

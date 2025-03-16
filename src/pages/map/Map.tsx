@@ -7,6 +7,8 @@ import { UserLocation } from "../../components/location/UserLocation";
 import GlobalContext from "../../context/globalContext";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
+const { kakao } = window as any;
+
 export const Map = () => {
     const { map, setMap, setMarker, isVisibleSidebar } = useMap();
     const [userId] = useLocalStorage<string>("userId", "");
@@ -16,15 +18,15 @@ export const Map = () => {
         try {
             const { lat, lng } = await getGeoLocationApi(); // 위치 정보 가져오기
 
-            window.kakao.maps.load(() => {
+            kakao.maps.load(() => {
                 const container = document.getElementById("map");
                 const options = {
-                    center: new window.kakao.maps.LatLng(lat, lng),
+                    center: new kakao.maps.LatLng(lat, lng),
                     level: 3,
                 };
-                const newMap = new window.kakao.maps.Map(container, options);
-                const newMarker = new window.kakao.maps.Marker({
-                    position: new window.kakao.maps.LatLng(lat, lng),
+                const newMap = new kakao.maps.Map(container, options);
+                const newMarker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(lat, lng),
                     clickable: true
                 });
 
@@ -49,10 +51,7 @@ export const Map = () => {
     }, []);
 
     return (
-        <div
-            id="map"
-            className="w-screen h-[calc(100vh-50px)] fixed top-[50px] bg-gray-300 left-0"
-        >
+        <div id="map" className="w-screen h-[calc(100vh-50px)] fixed top-[50px] bg-gray-300 left-0">
             <UserLocation />
             {isVisibleSidebar && <List />}
         </div>

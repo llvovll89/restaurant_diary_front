@@ -1,11 +1,5 @@
 import { createContext, useContext, useState } from "react";
 
-declare global {
-    interface Window {
-        kakao: any;
-    }
-}
-
 interface MapContextType {
     map: any;
     marker: any;

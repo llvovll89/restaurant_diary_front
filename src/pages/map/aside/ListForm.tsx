@@ -1,4 +1,5 @@
-import { Form } from "./content/Form";
+import {useState} from "react";
+import {Form} from "./content/Form";
 import {SearchDto} from "./dto/SearchListDto";
 
 interface Props {
@@ -6,10 +7,20 @@ interface Props {
 }
 
 export const ListForm = ({addressList}: Props) => {
+    const [selectedAddress, setSelectedAddress] = useState<SearchDto | null>(null);
+
+    const handleSelectAddress = (address: SearchDto) => {
+        if (address === selectedAddress) {
+            setSelectedAddress(null);
+        } else {
+            setSelectedAddress(address);
+        }
+    };
+
     return (
         <div className="w-full h-full flex flex-col gap-2">
             {addressList.map((address) => (
-                <Form address={address} />
+                <Form key={address.x} address={address} handleSelectAddress={handleSelectAddress} selectedAddress={selectedAddress} />
             ))}
         </div>
     )

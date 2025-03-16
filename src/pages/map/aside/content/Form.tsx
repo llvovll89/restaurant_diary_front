@@ -1,14 +1,30 @@
-import { SearchDto } from "../dto/SearchListDto";
+import {useState} from "react";
+import {useMap} from "../../context/MapContext";
+import {SearchDto} from "../dto/SearchListDto";
 
+const { kakao } = window as any;
 interface Props {
     address: SearchDto;
+    handleSelectAddress: (address: SearchDto) => void;
+    selectedAddress: SearchDto | null;
 }
 
-export const Form = ({ address }: Props) => {
-    return (
+export const Form = ({ address, handleSelectAddress, selectedAddress }: Props) => {
+    const { map } = useMap();
+
+    const mapTobounds = () => {
+        const bounds = new kakao.maps.LatLngBounds();
+        bounds.extend(new kakao.maps.LatLng(address.y, address.x));
+        map.setBounds(bounds);
+
+        handleSelectAddress(address);
+    };
+
+    return (    
         <article
             key={address.id}
-            className="flex flex-col w-full h-[146px] justify-between py-3 px-2 bg-white"
+            onClick={mapTobounds}
+            className={`${selectedAddress?.address_name === address.address_name ? "border-[#09f]" : "border-[#DEDEDE]"} flex flex-col w-full h-[146px] justify-between py-3 px-2 bg-white border border-solid rounded-[5px] cursor-pointer text-black`}
         >
             <header className="flex items-center justify-between">
                 <div className="flex items-center gap-2 select-none">

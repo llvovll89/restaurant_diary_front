@@ -2,13 +2,10 @@ import {useEffect, useState} from "react"
 import {DiaryList} from "./list/DiaryList"
 import {DiaryDto} from "./constants/DiaryDto.type"
 import {Form} from "./form/Form";
-import {useMap} from "../map/context/MapContext";
-import {Sidebar} from "../../components/sidebar/Sidebar";
 
 export const Diary = () => {
     const [diaryList, setDiaryList] = useState<DiaryDto[]>([]);
     const [selectedDiary, setSelectedDiary] = useState<DiaryDto | null>(null);
-    const { isVisibleSidebar } = useMap();
 
     useEffect(() => {
         setDiaryList([
@@ -50,7 +47,7 @@ export const Diary = () => {
 
     return (
         <section className="w-full min-h-[calc(100vh-50px)] relative top-[50px] left-0 flex">
-            <aside className="w-[300px] h-full relative z-[10] border-r border-solid border-gray-200">
+            <aside className="w-[300px] h-full relative border-r border-solid border-gray-200">
                 <ul className="w-full p-2 flex flex-col gap-3">
                     <DiaryList diaryList={diaryList} selectedItem={selectedItem} selectedDiary={selectedDiary} />
                 </ul>
@@ -61,8 +58,6 @@ export const Diary = () => {
                     <Form selectedDiary={selectedDiary} resetSelectedDiary={resetSelectedDiary} />
                 )
             }
-
-            {isVisibleSidebar && <Sidebar />}
         </section>
     )
 }

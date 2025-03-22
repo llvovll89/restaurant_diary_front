@@ -19,6 +19,9 @@ export const Search = () => {
             setAdress("");
             setAddressList([]);
             removeMarkers();
+        } else {
+            setAddressList([]);
+            removeMarkers();
         }
 
         setIsVisibleSearchForm((prevState) => !prevState);
@@ -95,7 +98,7 @@ export const Search = () => {
             };
         const  markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions);
         const  marker = new kakao.maps.Marker({
-                position: position,
+                position,
                 image: markerImage,
                 clickable: true
             });

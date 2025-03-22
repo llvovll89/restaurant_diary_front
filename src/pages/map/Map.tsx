@@ -1,17 +1,15 @@
 import { useContext, useEffect } from "react";
-import { List } from "./search/List";
 import { getGeoLocationApi } from "../../utils/getGeoLocationApi";
 import { useMap } from "./context/MapContext";
 import { UserLocation } from "../../components/location/UserLocation";
 
 import GlobalContext from "../../context/globalContext";
 import useLocalStorage from "../../hooks/useLocalStorage";
-import { Sidebar } from "../../components/sidebar/Sidebar";
 
 const { kakao } = window as any;
 
 export const Map = () => {
-    const { map, setMap, setMarker, isVisibleSidebar } = useMap();
+    const { map, setMap, setMarker } = useMap();
     const [userId] = useLocalStorage<string>("userId", "");
     const { isMobile } = useContext(GlobalContext);
 
@@ -63,7 +61,6 @@ export const Map = () => {
     return (
         <div id="map" className="w-screen h-[calc(100vh-50px)] fixed top-[50px] bg-gray-300 left-0">
             <UserLocation />
-            {isVisibleSidebar && <Sidebar />}
         </div>
     );
 };

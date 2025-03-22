@@ -5,7 +5,7 @@ export const Board = () => {
     const { isVisibleSidebar } = useMap();
 
     return (
-        <section className="w-full min-h-[calc(100vh-50px)] relative top-[50px] left-0">
+        <section className="w-full min-h-[calc(100vh-50px)] relative top-[50px] left-0 p-4">
             <span>게시판</span>
 
             {isVisibleSidebar && <Sidebar />}

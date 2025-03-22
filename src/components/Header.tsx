@@ -7,6 +7,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import {Search} from "../pages/map/search/Search";
 import {BOARD, DIARY, MAIN, MYPAGE, RANKING} from "../routes/Route";
 import {HeaderText} from "../type/HeaderText";
+import {Sidebar} from "./sidebar/Sidebar";
 
 export const Header = () => {
     const [isActiveSignIn, setIsActiveSignIn] = useState(false);
@@ -71,7 +72,7 @@ export const Header = () => {
 
     return (
         <header
-            className={`fixed left-0 top-0 z-[100] flex flex-col  ${
+            className={`fixed left-0 top-0 z-[10] flex flex-col  ${
                 isMobile
                     ? "w-full h-[32px] text-xs px-1"
                     : "bg-white w-screen h-[100px]"
@@ -120,6 +121,7 @@ export const Header = () => {
             </div>
 
             {(locationPath === MAIN) && <Search />}
+            {isVisibleSidebar && <Sidebar />}
         </header>
     );
 };

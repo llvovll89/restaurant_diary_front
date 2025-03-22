@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {useMap} from "../context/MapContext";
 import {SearchDto} from "../aside/dto/SearchListDto";
-import {List} from "../aside/List";
+import {List} from "./List";
 
 const { kakao } = window as any;
 

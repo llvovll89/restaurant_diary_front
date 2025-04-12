@@ -13,10 +13,15 @@ interface RouteItems {
 }
 
 export const routes: RouteItems[] = [
-    { path: MAIN, component: Map, name: "Main" , icon: "/images/icons/ico_map.svg" },
-    { path: DIARY, component: Diary, name: "Diary", icon: "" },
-    { path: MYPAGE, component: MyPage, name: "Mypage", icon: "" },
-    { path: BOARD, component: Board, name: "Board", icon: "" },
-    { path: RANKING, component: Ranking, name: "Rank", icon: "" },
+    {
+        path: MAIN,
+        component: Map,
+        name: "Main",
+        icon: "/images/icons/ico_map.svg",
+    },
+    {path: DIARY, component: Diary, name: "Diary", icon: ""},
+    {path: BOARD, component: Board, name: "Board", icon: ""},
+    {path: RANKING, component: Ranking, name: "Rank", icon: ""},
+    {path: MYPAGE, component: MyPage, name: "Mypage", icon: ""},
     // {path: "*", component: NotFoundPage}, // 404 page
 ];

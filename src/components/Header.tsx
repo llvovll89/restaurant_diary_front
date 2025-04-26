@@ -1,4 +1,4 @@
-import {useLocation, useNavigate } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {SignIn} from "../components/account/signin/SignIn";
 import {useContext, useEffect, useState} from "react";
 import {useMap} from "../pages/map/context/MapContext";
@@ -8,16 +8,27 @@ import {Search} from "../pages/map/search/Search";
 import {BOARD, DIARY, MAIN, MYPAGE, RANKING} from "../routes/Route";
 import {HeaderText} from "../type/HeaderText";
 import {Sidebar} from "./sidebar/Sidebar";
+import {Account} from "./account/Account";
+import {UserData} from "./account/type/userData.type";
 
 export const Header = () => {
     const [isActiveSignIn, setIsActiveSignIn] = useState(false);
     const locationPath = useLocation().pathname;
-    const { toggleIsVisibleSidebar, isVisibleSidebar } = useMap();
-    const { isMobile } = useContext(GlobalContext);
-    const [userId, , deleteValue] = useLocalStorage<string>("userId", "");
+    const {toggleIsVisibleSidebar, isVisibleSidebar} = useMap();
+    const {isMobile} = useContext(GlobalContext);
+    const [userData, , deleteValue] = useLocalStorage<UserData>("userData", {
+        rowId: 0,
+        userId: "",
+        login_tz: "",
+        create_tz: "",
+        name: "",
+        profile_img: "",
+    });
+    const [isVisibleAccount, setIsVisibleAccount] = useState(false);
     const navigate = useNavigate();
 
     const toggleActiveSignIn = () => setIsActiveSignIn((prev) => !prev);
+    const toggleVisibleAccount = () => setIsVisibleAccount((prev) => !prev);
 
     // ✅ 공통 버튼 컴포넌트
     const SidebarToggleButton = () => (
@@ -65,10 +76,10 @@ export const Header = () => {
     };
 
     useEffect(() => {
-        if (!userId) {
-            navigate("/"); // userId가 없으면 "/"로 리다이렉트
+        if (!userData) {
+            navigate("/"); // userData가 없으면 "/"로 리다이렉트
         }
-    }, [userId, navigate]);
+    }, [userData, navigate]);
 
     return (
         <header
@@ -91,25 +102,21 @@ export const Header = () => {
 
                 {!isMobile && (
                     <div className="w-[150px] h-full flex justify-end items-center">
-                        {!userId ? (
+                        {!userData.userId ? (
                             <button
                                 onClick={toggleActiveSignIn}
                                 className={`${
-                                    isActiveSignIn ? "bg-[#09f]" : "bg-black"
-                                } w-[56px] text-white h-full flex items-center justify-center pointerHover:hover:scale-[0.97] pointerHover:hover:bg-sub_navy duration-150 ease-in-out`}
+                                    isActiveSignIn && "zg-[#09f]"
+                                } text-black font-bold`}
                             >
-                                <img
-                                    src="images/icons/ico_user.svg"
-                                    alt="sign-in"
-                                    className="w-6 h-6"
-                                />
+                                SignIn
                             </button>
                         ) : (
                             <button
-                                onClick={signOut}
-                                className="ml-auto w-[36px] h-[36px] bg-[#c0d2d7] text-white rounded-full border border-solid border-[#DEDEDE] text-lg font-bold"
+                                onClick={toggleVisibleAccount}
+                                className="ml-auto w-[36px] h-[36px] bg-primary text-white rounded-full border border-solid border-[#DEDEDE] text-lg font-bold"
                             >
-                                {userId.substring(0, 1)}
+                                {userData.userId.substring(0, 1)}
                             </button>
                         )}
                     </div>
@@ -120,8 +127,15 @@ export const Header = () => {
                 )}
             </div>
 
-            {(locationPath === MAIN) && <Search />}
+            {locationPath === MAIN && <Search />}
             {isVisibleSidebar && <Sidebar />}
+            {isVisibleAccount && (
+                <Account
+                    userData={userData}
+                    toggleVisibleAccount={toggleVisibleAccount}
+                    signOut={signOut}
+                />
+            )}
         </header>
     );
 };

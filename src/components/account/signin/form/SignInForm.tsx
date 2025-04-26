@@ -1,19 +1,27 @@
-import { useState } from "react";
+import {useState} from "react";
 import useLocalStorage from "../../../../hooks/useLocalStorage";
+import {UserData} from "../../type/userData.type";
 
 interface Props {
     toggleActiveSignIn: () => void;
 }
 
-export const SignInForm = ({ toggleActiveSignIn }: Props) => {
-    const [userId, setUserId] = useLocalStorage<string>("userId", "");
+export const SignInForm = ({toggleActiveSignIn}: Props) => {
+    const [userData, setUserData] = useLocalStorage<UserData>("userData", {
+        rowId: 0,
+        userId: "",
+        login_tz: "",
+        create_tz: "",
+        name: "",
+        profile_img: "",
+    });
     const [signInData, setSignInData] = useState({
-        id: userId,
+        id: userData.userId,
         password: "",
     });
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name } = event.target;
+        const {name} = event.target;
 
         setSignInData({
             ...signInData,
@@ -21,16 +29,36 @@ export const SignInForm = ({ toggleActiveSignIn }: Props) => {
         });
     };
 
+    const pad = (n: number) => n.toString().padStart(2, "0");
+
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setUserId(signInData.id);
-        
+
+        const now = new Date();
+        const formattedNow = `${now.getFullYear()}-${pad(
+            now.getMonth() + 1
+        )}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(
+            now.getMinutes()
+        )}:${pad(now.getSeconds())}`;
+
+        setUserData({
+            ...userData,
+            userId: signInData.id,
+            login_tz: formattedNow,
+            create_tz: userData.create_tz || formattedNow,
+            name: userData.name || "",
+            profile_img: userData.profile_img || "",
+        });
+
         alert(`${signInData.id}(님) 반갑습니다!`);
         toggleActiveSignIn();
     };
 
     return (
-        <form className="w-full flex items-center gap-3 flex-col" onSubmit={onSubmit}>
+        <form
+            className="w-full flex items-center gap-3 flex-col"
+            onSubmit={onSubmit}
+        >
             <div className="w-full flex flex-col gap-1">
                 <label className="text-sm">아이디</label>
                 <input
@@ -56,9 +84,12 @@ export const SignInForm = ({ toggleActiveSignIn }: Props) => {
                 />
             </div>
 
-            <button type="submit" className="bg-blue-400 text-white w-full h-[46px] rounded-[5px]">
+            <button
+                type="submit"
+                className="bg-blue-400 text-white w-full h-[46px] rounded-[5px]"
+            >
                 로그인
             </button>
         </form>
-    )
-}
+    );
+};

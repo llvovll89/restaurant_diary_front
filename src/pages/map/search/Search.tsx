@@ -10,7 +10,7 @@ export const Search = () => {
     const [addressList, setAddressList] = useState<SearchDto[]>([]);
     const [address, setAdress] = useState("");
     const markers = useRef<any[]>([]);
-    const {map} = useMap();
+    const {map, toggleIsVisibleSidebar, isVisibleSidebar} = useMap();
 
     const searchRef = useRef(null);
 
@@ -40,6 +40,7 @@ export const Search = () => {
 
     const onKeydown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
+            if (isVisibleSidebar) toggleIsVisibleSidebar();
             getPoiSearch();
         } else if (event.key === "Escape") {
             resetState();
@@ -147,7 +148,7 @@ export const Search = () => {
             <div className="flex items-center justify-between w-full h-[50px]">
                 <input
                     type="text"
-                    className="focus:border-[#09f] w-[calc(100%-46px)] rounded-[5px] border border-solid border-[#DEDEDE] text-black text-xs h-full focus:outline-none p-2"
+                    className="focus:border-[#09f] w-[calc(100%-46px)] rounded-[5px] border border-solid border-[#DEDEDE] tracking-[0.075rem] text-black text-sm h-full focus:outline-none px-2"
                     placeholder="장소, 주소, 키워드 검색"
                     value={address}
                     onChange={(e) => setAdress(e.target.value)}
@@ -156,7 +157,7 @@ export const Search = () => {
                 />
                 <button
                     onClick={toggleSearchForm}
-                    className="w-[42px] h-full flex items-center justify-center rounded-[5px] bg-black border border-solid border-white"
+                    className="w-[42px] h-full flex items-center justify-center rounded-[5px] bg-primary border border-solid border-white shadow-modal_shadow"
                 >
                     <img
                         src={getSearchSubmitIcon()}

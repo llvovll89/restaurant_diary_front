@@ -95,7 +95,7 @@ export const Header = () => {
                 </div>
 
                 <button onClick={refreshPage}>
-                    <h1 className="font-bold text-black select-none text-xl">
+                    <h1 className="font-bold text-black select-none text-xl custom-text-shadow-gray-sm tracking-[0.05rem]">
                         {setHeaderName()}
                     </h1>
                 </button>

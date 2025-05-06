@@ -3,20 +3,31 @@ import {Riview} from "./Riview";
 
 interface Props {
     selectedAddress: SearchDto;
+    onCloseInfo: () => void;
 }
 
-export const InfoContent = ({selectedAddress}: Props) => {
-    console.log(selectedAddress);
-
+export const InfoContent = ({selectedAddress, onCloseInfo}: Props) => {
     return (
         <div className="w-full h-full flex flex-col gap-4">
             <header className="w-full h-[52px] flex justify-between items-center">
                 <div className="flex flex-col">
-                    <span className="text-lg">
-                        {selectedAddress.place_name}
-                    </span>
+                    <div className="flex items-center gap-2">
+                        <span className="text-lg">
+                            {selectedAddress.place_name}
+                        </span>
+                        <span className="text-xs">
+                            ({selectedAddress.road_address_name})
+                        </span>
+                    </div>
                     <span>({selectedAddress.category_name})</span>
                 </div>
+
+                <button
+                    onClick={onCloseInfo}
+                    className="bg-black rounded-[3px] shadow-lg"
+                >
+                    <img src="/images/icons/ico_x.svg" />
+                </button>
             </header>
 
             <div className="w-full flex flex-col h-[800px] border border-solid border-[#CECECE] bg-white ">

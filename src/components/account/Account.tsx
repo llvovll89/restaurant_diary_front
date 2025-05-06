@@ -1,4 +1,6 @@
+import {useNavigate} from "react-router-dom";
 import {UserData} from "./type/userData.type";
+import {MYPAGE} from "../../routes/Route";
 
 interface Props {
     userData: UserData;
@@ -7,16 +9,23 @@ interface Props {
 }
 
 export const Account = ({userData, toggleVisibleAccount, signOut}: Props) => {
+    const navigate = useNavigate();
+
     const signOutEvent = () => {
         signOut();
         toggleVisibleAccount();
     };
 
+    const linkToMyPage = () => {
+        toggleVisibleAccount();
+        navigate(MYPAGE);
+    };
+
     return (
-        <section className="w-screen h-screen bg-[rgba(0,0,0,0.36)] flex items-center justify-center fixed left-0 top-0">
+        <section className="w-screen h-screen bg-[rgba(0,0,0,0.36)] flex items-center justify-center fixed left-0 top-0 z-[50]">
             <article className="flex flex-col w-[450px] min-h-[300px] py-3 px-4 rounded-[5px] shadow-lg bg-white gap-3 font-bold">
                 <header className="w-full flex items-center justify-between h-[32px]">
-                    <span>마이페이지</span>
+                    <span>회원정보</span>
                     <button
                         onClick={toggleVisibleAccount}
                         className="w-max text-md"
@@ -50,13 +59,19 @@ export const Account = ({userData, toggleVisibleAccount, signOut}: Props) => {
                     <ul className="w-full flex flex-col gap-1">
                         <li className="h-11 font-normal text-sm flex items-center px-2 border-b border-solid border-[#CEECEE] border-t justify-between">
                             <span>회원 정보 수정</span>
-                            <button className="w-6 h-full text-2xl font-normal">
+                            <button
+                                onClick={linkToMyPage}
+                                className="w-6 h-full text-2xl font-normal"
+                            >
                                 {">"}
                             </button>
                         </li>
                         <li className="h-11 font-normal text-sm flex items-center px-2 border-b border-solid border-[#CEECEE] justify-between">
                             <span>비밀 번호 수정</span>
-                            <button className="w-6 h-full text-2xl font-normal">
+                            <button
+                                onClick={linkToMyPage}
+                                className="w-6 h-full text-2xl font-normal"
+                            >
                                 {">"}
                             </button>
                         </li>

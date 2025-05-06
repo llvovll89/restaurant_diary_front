@@ -76,6 +76,20 @@ li {
     border-top: 6px solid rgba(0, 174, 239, 0.8);
     border-radius: 100%;
 }
+
+/* 텍스트 쉐도우 */
+.custom-text-shadow-black-md {
+    text-shadow: 1.5px 1.5px #181818;
+}
+
+.custom-text-shadow-black-sm {
+    text-shadow: 1px 1px #181818;
+}
+
+.custom-text-shadow-gray-sm {
+    text-shadow: 1px 1px #cecece;
+}
+
 @-webkit-keyframes rotation {
     from {
         -webkit-transform: rotate(0deg);

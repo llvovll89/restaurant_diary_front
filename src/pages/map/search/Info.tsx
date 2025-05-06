@@ -3,20 +3,20 @@ import {InfoContent} from "./contents/InfoContent";
 
 interface Props {
     selectedAddress: SearchDto | null;
+    onCloseInfo: () => void;
 }
 
-export const Info = ({selectedAddress}: Props) => {
-    const notFoundSelectedAddress = () => {
-        return <span>DefaultAddress</span>;
-    };
-
+export const Info = ({selectedAddress, onCloseInfo}: Props) => {
     return (
-        <section className="w-[calc(100%-358px)] h-full bg-[#F5F7F8] text-black py-3 px-4 select-none">
-            {selectedAddress ? (
-                <InfoContent selectedAddress={selectedAddress} />
-            ) : (
-                notFoundSelectedAddress()
+        <>
+            {selectedAddress && (
+                <section className="fixed left-[360px] w-[calc(100%-360px)] h-[calc(100vh-100px)] bg-[#F5F7F8] text-black py-3 px-4 select-none">
+                    <InfoContent
+                        selectedAddress={selectedAddress}
+                        onCloseInfo={onCloseInfo}
+                    />
+                </section>
             )}
-        </section>
+        </>
     );
 };
